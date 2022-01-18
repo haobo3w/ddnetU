@@ -14,20 +14,28 @@ public class Runnable : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    
+
     void FixedUpdate()
     {
         float moveDir = Input.GetAxisRaw("Horizontal");
-       
+
+        var motionState = (MotionState)animator.GetInteger(AnimaParmName.MotionState);
         if (moveDir == 0)
         {
-            animator.SetInteger("motionState", (int)MotionState.Idle);
+            if (motionState == MotionState.Run)
+            {
+                animator.SetInteger(AnimaParmName.MotionState, (int)MotionState.Idle);
+            }
         }
         else
         {
-            animator.SetInteger("motionState", (int)MotionState.Run);
-            animator.SetFloat("speed", rgbd2d.velocity.x);
-            animator.SetBool("runLeft", moveDir < 0);
+            if (motionState == MotionState.Idle)
+            {
+                animator.SetInteger(AnimaParmName.MotionState, (int)MotionState.Run);
+                animator.SetFloat(AnimaParmName.Speed, rgbd2d.velocity.x);
+                animator.SetBool(AnimaParmName.RunLeft, moveDir < 0);
+            }
+            
             rgbd2d.AddForce((moveDir < 0 ? Vector2.left : Vector2.right) * 10);
         }
     }

@@ -9,6 +9,7 @@ public class Jumpable : MonoBehaviour
     private int jumpCount = 2;
 
     private Rigidbody2D rgbd2d;
+    private Animator animator;
 
     public void SetJumpCount(int newJumpCount)
     {
@@ -18,6 +19,7 @@ public class Jumpable : MonoBehaviour
     void Start()
     {
         rgbd2d = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
 
@@ -35,7 +37,8 @@ public class Jumpable : MonoBehaviour
     void Jump()
     {
         jumped++;
-        rgbd2d.AddForce(Vector2.up*200);
+        rgbd2d.AddForce(Vector2.up * 200);
+
     }
 
 
@@ -44,6 +47,15 @@ public class Jumpable : MonoBehaviour
         if (collision.CompareTag("Ground"))
         {
             resetJump();
+            animator.SetInteger(AnimaParmName.MotionState, (int)MotionState.Idle);
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Ground"))
+        {
+            animator.SetInteger(AnimaParmName.MotionState, (int)MotionState.Jump);
         }
     }
 
