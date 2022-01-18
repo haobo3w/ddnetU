@@ -29,7 +29,7 @@ public class EyeFollow : MonoBehaviour
         {
             y = -y;
         }
-        transform.position = PivotPoint.localPosition + new Vector3(x, y);
+        transform.localPosition = PivotPoint.localPosition + new Vector3(x, y);
     }
     
 }
