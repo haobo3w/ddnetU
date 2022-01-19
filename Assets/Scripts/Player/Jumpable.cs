@@ -6,14 +6,16 @@ public class Jumpable : MonoBehaviour
 {
 
     private int jumped = 0;
-    private int jumpCount = 2;
+    public int JumpCount = 2;
+
+    public float DefaultSpeed = 3;
 
     private Rigidbody2D rgbd2d;
     private Animator animator;
 
     public void SetJumpCount(int newJumpCount)
     {
-        jumpCount = newJumpCount;
+        JumpCount = newJumpCount;
     }
 
     void Start()
@@ -37,7 +39,7 @@ public class Jumpable : MonoBehaviour
     void Jump()
     {
         jumped++;
-        rgbd2d.AddForce(Vector2.up * 200);
+        rgbd2d.velocity = new Vector2(rgbd2d.velocity.x, jumped > 0 ? DefaultSpeed / 2 : DefaultSpeed);
 
     }
 
@@ -48,6 +50,7 @@ public class Jumpable : MonoBehaviour
         {
             resetJump();
             animator.SetInteger(AnimaParmName.MotionState, (int)MotionState.Idle);
+            rgbd2d.velocity = new Vector2(0, rgbd2d.velocity.y);
         }
     }
 
@@ -61,7 +64,7 @@ public class Jumpable : MonoBehaviour
 
     private bool canJump()
     {
-        return jumped < jumpCount;
+        return jumped < JumpCount;
     }
 
     private void resetJump()
